@@ -1,5 +1,5 @@
-com\mensa\se\milintegration\repository\IntegrationRepo.class
 com\mensa\se\milintegration\entity\Request.class
+com\mensa\se\milintegration\repository\IntegrationRepo.class
 com\mensa\se\milintegration\controller\IntegrationController.class
 com\mensa\se\milintegration\MensaIntegrationApplication.class
 com\mensa\se\milintegration\services\IntegrationService.class

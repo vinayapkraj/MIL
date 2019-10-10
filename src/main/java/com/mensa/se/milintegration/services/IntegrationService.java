@@ -1,7 +1,7 @@
 package com.mensa.se.milintegration.services;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.dataformat.xml.ser.ToXmlGenerator;
 import com.mensa.se.milintegration.entity.Member;
@@ -18,6 +18,7 @@ import java.util.Date;
 public class IntegrationService {
     @Autowired
     private IntegrationRepo integrationRepo;
+    private Member response = new Member();
 
     @EventListener({ApplicationReadyEvent.class})
     public void init() {
@@ -35,8 +36,17 @@ public class IntegrationService {
     public String getExpiryDate(Request req){
         XmlMapper xmlMapper = new XmlMapper();
         xmlMapper.configure(ToXmlGenerator.Feature.WRITE_XML_DECLARATION, true);
+        xmlMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         try {
-            return xmlMapper.writeValueAsString(integrationRepo.findByMemNumber(req.getMem_number()));
+            Member tempMem = integrationRepo.findByMemNumber(req.getMem_number());
+            if(tempMem!=null) {
+                response.setExpiryDate(tempMem.getExpiryDate());
+                response.setFirstName(tempMem.getFirstName());
+               // response.setLastName(null);
+               // response.setMemNumber(null);
+            }
+            return xmlMapper.writeValueAsString(response);
+           // return response;
         } catch (JsonProcessingException e) {
             e.printStackTrace();
             return null;
